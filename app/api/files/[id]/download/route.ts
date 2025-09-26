@@ -9,14 +9,19 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
+  if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const user = await prisma.user.findUnique({ where: { email: session.user.email } })
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
   const file = await prisma.file.findFirst({
     where: {
       id: params.id,
-      userId: session.user.id,
+      userId: user.id,
     },
   })
 

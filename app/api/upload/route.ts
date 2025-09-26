@@ -6,8 +6,13 @@ import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
+  if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const user = await prisma.user.findUnique({ where: { email: session.user.email } })
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
   try {
@@ -33,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Upload to Supabase Storage
     const fileName = `${Date.now()}-${file.name}`
-    const filePath = `${session.user.id}/${fileName}`
+    const filePath = `${user.id}/${fileName}`
     
     const { error: uploadError } = await supabase.storage
       .from('files')
@@ -49,7 +54,7 @@ export async function POST(request: NextRequest) {
         filename: file.name,
         path: filePath,
         categoryId,
-        userId: session.user.id,
+        userId: user.id,
       },
     })
 
