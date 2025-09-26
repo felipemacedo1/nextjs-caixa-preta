@@ -13,7 +13,7 @@ interface Category {
   name: string
 }
 
-interface File {
+interface FileData {
   id: string
   filename: string
   createdAt: string
@@ -24,10 +24,10 @@ export function Dashboard() {
   const { data: session } = useSession()
   const { toast } = useToast()
   const [categories, setCategories] = useState<Category[]>([])
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<FileData[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [newCategoryName, setNewCategoryName] = useState('')
-  const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [uploadFile, setUploadFile] = useState<globalThis.File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
