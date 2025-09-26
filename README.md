@@ -120,7 +120,3 @@ Acesse: http://localhost:3000
 - Usuários só acessam **seus próprios arquivos**
 - Validação de **tipo e tamanho** de arquivo
 - **Autenticação obrigatória** para todas as rotas
-
----
-
-**Pronto para usar!** 🚀 Um microSaaS completo em poucos minutos.
